@@ -18,6 +18,7 @@ interface CardPratoProps {
   nome: string;
   cozinha: string;
   descricao_resumida: string;
+  descricao_detalhada: string;
   imagem: string;
   prazoValidade?: Date;
   valor: number;
@@ -28,6 +29,7 @@ const CardPrato: FC<CardPratoProps> = ({
   nome,
   cozinha,
   descricao_resumida,
+  descricao_detalhada,
   imagem,
   valor,
 }) => {
@@ -52,11 +54,11 @@ const CardPrato: FC<CardPratoProps> = ({
     const pratoToAdd: PratoCarrinho = pratoExistente
       ? { ...pratoExistente, quantidade }
       : {
-          id,
-          nome,
-          valor,
-          quantidade,
-        };
+        id,
+        nome,
+        valor,
+        quantidade,
+      };
 
     adicionarPrato(pratoToAdd);
 
@@ -73,12 +75,27 @@ const CardPrato: FC<CardPratoProps> = ({
     <Card>
       {/* Imagem */}
       <div className="relative">
-        <img
-          src={imagem}
-          alt={nome}
-          className="h-40 w-full object-cover sm:h-44"
-          loading="lazy"
-        />
+        <div className="bg-transparent w-1/1 h-[300px] [perspective:1000px]">
+          <div className="relative w-auto h-full text-center transition-transform duration-700 
+            [transform-style:preserve-3d] hover:[transform:rotateY(180deg)]">
+            {/* flipcard front */}
+            <div className="absolute w-full h-full bg-white text-black [backface-visibility:hidden]">
+              <img
+                src={imagem}
+                alt={nome}
+                className="flex-center h-40 w-full object-cover sm:h-44"
+                loading="lazy"
+              />
+            </div>
+            {/* flipcard back */}
+            <div className="absolute w-full h-full bg-[#bbb] text-white [transform:rotateY(180deg)] [backface-visibility:hidden]">
+              <div>
+                <p className='py-3'>{nome}</p>
+                <p className='pv-3'>{descricao_detalhada}</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Menu de opções */}
         <div className="absolute right-2 top-2">
